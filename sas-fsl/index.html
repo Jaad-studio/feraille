@@ -43,7 +43,7 @@
             width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.6;
+            opacity: 1;
         }
 
         /* ===== INTRO ANIMATION ===== */
@@ -637,9 +637,64 @@
             padding: 0.8rem 1.5rem;
         }
 
+        /* ===== MOBILE HAMBURGER ===== */
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+        .nav-toggle span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: white;
+            margin: 5px 0;
+            transition: all 0.3s;
+        }
+        .nav.scrolled .nav-toggle span { background: var(--iron); }
+
         @media (max-width: 768px) {
-            .nav-links { display: none; }
+            .nav-toggle { display: block; }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(255,255,255,0.97);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem 0;
+                gap: 1.5rem;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            }
+            .nav-links.open { display: flex; }
+            .nav-links a { color: var(--iron) !important; }
             .floating-badges { flex-direction: column; align-items: center; padding: 0 1rem; }
+            .badge { min-width: auto; width: 90%; justify-content: center; }
+            .hero-content h1 { font-size: clamp(2.2rem, 10vw, 4rem); }
+            .hero-tagline { font-size: 0.7rem !important; letter-spacing: 3px !important; }
+            .hero-content .btn-gold,
+            .hero-content .btn-outline {
+                padding: 1rem 1.8rem;
+                font-size: 0.65rem;
+                letter-spacing: 2px;
+            }
+            .section-intro { padding: 8rem 1.5rem 3rem; }
+            .section-intro h2 { font-size: clamp(1.8rem, 6vw, 3rem); }
+            .gallery { grid-template-columns: 1fr !important; }
+            .services-grid { gap: 1.5rem; }
+            .service-card { padding: 2rem 1.5rem; }
+            .video-banner { height: 40vh; }
+            .contact-layout { grid-template-columns: 1fr !important; gap: 2rem !important; }
+            .contact-info h2 { font-size: 2rem; }
+            .form-card { padding: 2rem 1.2rem; }
+            .faq-question { font-size: 1rem; padding: 1.2rem 0; }
+            .stat-number { font-size: clamp(2rem, 8vw, 3rem); }
+            .nav-inner { padding: 0; }
         }
 
         /* ===== WhatsApp ===== */
@@ -943,7 +998,10 @@
     <nav class="nav" id="navbar">
         <div class="nav-inner">
             <a href="#" class="nav-brand">FSL<span>.</span></a>
-            <ul class="nav-links">
+            <button class="nav-toggle" id="navToggle" onclick="document.getElementById('navLinks').classList.toggle('open')">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#realisations">Réalisations</a></li>
                 <li><a href="#savoir-faire">Savoir-Faire</a></li>
                 <li><a href="#contact" class="nav-cta">Devis Gratuit</a></li>
@@ -1134,8 +1192,8 @@
     </section>
 
     <!-- CONTACT (updated with form) -->
-    <section class="contact-section" id="contact" style="padding:8rem 2rem;">
-        <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem;">
+    <section class="contact-section" id="contact" style="padding:8rem 1.5rem;">
+        <div class="contact-layout" style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:4rem;">
             <div class="contact-info reveal">
                 <h2>Votre Projet<br><em>Commence Ici</em></h2>
                 <p style="color:rgba(255,255,255,0.6); line-height:1.8; margin-bottom:3rem;">Remplissez le formulaire ci-contre ou contactez-nous directement. Nous vous répondons sous 24h.</p>
@@ -1236,10 +1294,10 @@
             reset(init) {
                 this.x = Math.random() * canvas.width;
                 this.y = init ? Math.random() * canvas.height : -10;
-                this.size = Math.random() * 3 + 0.5;
+                this.size = Math.random() * 4 + 1;
                 this.speedY = Math.random() * 0.8 + 0.2;
                 this.speedX = (Math.random() - 0.5) * 0.3;
-                this.opacity = Math.random() * 0.6 + 0.2;
+                this.opacity = Math.random() * 0.7 + 0.3;
                 this.pulse = Math.random() * Math.PI * 2;
                 this.pulseSpeed = Math.random() * 0.03 + 0.01;
             }
