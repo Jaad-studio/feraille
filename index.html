@@ -41,7 +41,7 @@
             will-change: transform;
         }
 
-        /* Glassmorphism haute fidélité */
+        /* Glassmorphism */
         .glass-panel {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(20px) saturate(180%);
@@ -68,7 +68,13 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Ticker horizontal pour les cours */
+        /* Correction de l'affichage du titre */
+        .hero-title {
+            line-height: 1.1; /* Augmentation pour éviter les coupures */
+            padding-bottom: 0.1em;
+        }
+
+        /* Ticker horizontal */
         .ticker-wrap {
             width: 100%;
             overflow: hidden;
@@ -86,7 +92,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Stylisation Select Custom */
         .select-custom {
             appearance: none;
             background: rgba(15, 23, 42, 0.95);
@@ -98,27 +103,59 @@
             font-weight: 600;
             outline: none;
             cursor: pointer;
-            transition: border-color 0.3s;
         }
-        .select-custom:focus { border-color: var(--eco-green); }
 
-        .btn-glow {
-            transition: all 0.4s ease;
-            box-shadow: 0 0 0 0 rgba(5, 150, 105, 0);
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+            z-index: 100;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
-        .btn-glow:hover {
-            box-shadow: 0 0 25px 5px rgba(5, 150, 105, 0.3);
-            transform: translateY(-2px);
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+            background-color: #128c7e;
+        }
+        .pulse {
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* Styles FAQ */
+        .faq-item[open] summary svg {
+            transform: rotate(180deg);
+        }
+        summary::-webkit-details-marker {
+            display: none;
         }
     </style>
 </head>
 <body>
 
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/33699491131" target="_blank" class="whatsapp-float pulse">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
     <!-- Loader -->
     <div id="loader" class="fixed inset-0 z-50 flex items-center justify-center bg-white">
         <div class="flex flex-col items-center">
             <div class="w-10 h-10 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin mb-4"></div>
-            <p class="text-emerald-900 font-bold tracking-[0.3em] text-[9px] uppercase text-center">Chargement de<br>l'expertise</p>
+            <p class="text-emerald-900 font-bold tracking-[0.3em] text-[9px] uppercase text-center">Chargement de l'expertise</p>
         </div>
     </div>
 
@@ -135,9 +172,9 @@
                 </div>
             </div>
             <div class="hidden md:flex gap-8 text-[9px] font-black text-slate-500 tracking-widest uppercase">
-                <a href="#process" class="hover:text-emerald-600 transition-colors">PROCESSUS</a>
+                <a href="#galerie" class="hover:text-emerald-600 transition-colors">GALERIE</a>
                 <a href="#simulator" class="hover:text-emerald-600 transition-colors">ESTIMATION</a>
-                <a href="#contact" class="hover:text-emerald-600 transition-colors">CONTACT</a>
+                <a href="#faq" class="hover:text-emerald-600 transition-colors">FAQ</a>
             </div>
             <a href="tel:0699491131" class="btn-glow bg-slate-900 text-white px-5 py-2 rounded-xl text-[9px] font-black tracking-widest uppercase">
                 06 99 49 11 31
@@ -152,7 +189,7 @@
                 <div class="reveal inline-block px-4 py-1.5 rounded-full bg-emerald-100/80 text-emerald-700 text-[10px] font-black tracking-widest uppercase mb-8 border border-emerald-200">
                     N°1 de la valorisation • Drôme 26
                 </div>
-                <h1 class="reveal text-7xl md:text-[8rem] font-extrabold leading-[0.85] gradient-text mb-10 tracking-tighter text-balanced">
+                <h1 class="reveal text-7xl md:text-[8rem] font-extrabold hero-title gradient-text mb-10 tracking-tighter text-balanced">
                     Recycler <br><span class="italic font-light text-slate-400">parfaitement.</span>
                 </h1>
                 <p class="reveal text-slate-600 text-lg md:text-xl max-w-lg mb-12 font-medium leading-relaxed">
@@ -166,36 +203,19 @@
         </div>
     </section>
 
-    <!-- Cours du jour ticker -->
-    <div class="ticker-wrap">
-        <div class="ticker text-emerald-400 font-bold text-xs uppercase tracking-widest">
-            • CUIVRE : 6.50€/KG <span class="text-white opacity-40">(STABLE)</span> • ALUMINIUM : 1.85€/KG <span class="text-white opacity-40">(EN HAUSSE)</span> • LAITON : 1.30€/KG • CÂBLES : 4.70€/KG • FERRAILLE : 0.22€/KG • BATTERIES : 0.60€/KG • RADIATEURS : 1.20€/KG • 
-            • CUIVRE : 6.50€/KG • ALUMINIUM : 1.85€/KG • LAITON : 1.30€/KG • CÂBLES : 4.70€/KG • FERRAILLE : 0.22€/KG • BATTERIES : 0.60€/KG • RADIATEURS : 1.20€/KG • 
-        </div>
-    </div>
-
-    <!-- Process Section -->
-    <section id="process" class="py-32 px-6">
+    <!-- Galerie Images -->
+    <section id="galerie" class="py-24 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="mb-20">
-                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 reveal mb-4">Un service en 3 étapes.</h2>
-                <p class="text-slate-500 font-medium reveal">Simplicité, Rapidité, Transparence.</p>
-            </div>
-            <div class="grid md:grid-cols-3 gap-10">
-                <div class="card-premium p-10 rounded-[3rem] reveal">
-                    <div class="text-emerald-600 font-black text-6xl mb-8 opacity-10">01</div>
-                    <h3 class="text-xl font-bold mb-4">Estimation gratuite</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Nous évaluons vos gisements de métaux sur place ou par téléphone selon le cours officiel du jour.</p>
+            <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 reveal mb-16 text-center">Nos interventions en <span class="text-emerald-600 italic">images</span>.</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="card-premium overflow-hidden rounded-[2.5rem] reveal group">
+                    <img src="https://placehold.co/600x450/1e293b/ffffff?text=Recyclage+Cuivre" alt="[Image de Recyclage Cuivre]" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 </div>
-                <div class="card-premium p-10 rounded-[3rem] reveal">
-                    <div class="text-emerald-600 font-black text-6xl mb-8 opacity-10">02</div>
-                    <h3 class="text-xl font-bold mb-4">Logistique & Pose</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Mise à disposition gratuite de bennes ou enlèvement rapide avec nos camions grue sous 24h.</p>
+                <div class="card-premium overflow-hidden rounded-[2.5rem] reveal group">
+                    <img src="https://placehold.co/600x450/059669/ffffff?text=Pose+de+Bennes" alt="[Image de Pose de Bennes]" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 </div>
-                <div class="card-premium p-10 rounded-[3rem] reveal">
-                    <div class="text-emerald-600 font-black text-6xl mb-8 opacity-10">03</div>
-                    <h3 class="text-xl font-bold mb-4">Paiement Immédiat</h3>
-                    <p class="text-slate-500 text-sm leading-relaxed">Règlement instantané par virement ou chèque après pesée certifiée sur notre site de Chabeuil.</p>
+                <div class="card-premium overflow-hidden rounded-[2.5rem] reveal group">
+                    <img src="https://placehold.co/600x450/facc15/333333?text=Stock+Metaux" alt="[Image de Stock Métaux]" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
                 </div>
             </div>
         </div>
@@ -206,73 +226,88 @@
         <div class="max-w-7xl mx-auto">
             <div class="glass-panel p-10 md:p-20 rounded-[4rem] grid lg:grid-cols-2 gap-20 items-center">
                 <div class="reveal">
-                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight">Outil de <br><span class="text-emerald-600 italic">valorisation.</span></h2>
-                    <p class="text-slate-500 text-lg mb-10 font-medium">Découvrez instantanément le potentiel financier de vos métaux dormants. Cotations basées sur le marché global.</p>
-                    <div class="flex items-center gap-4 bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
-                        <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold">!</div>
-                        <p class="text-emerald-800 text-sm font-bold leading-tight">Prix indicatifs. La cotation finale est validée lors de la pesée physique.</p>
-                    </div>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 tracking-tight leading-none">Vendez au <br><span class="text-emerald-600 italic underline decoration-indus-yellow underline-offset-8">vrai prix.</span></h2>
+                    <p class="text-slate-500 mb-10 leading-relaxed font-medium">Algorithme basé sur les cours officiels pour une transparence totale et une estimation en temps réel de vos stocks.</p>
                 </div>
-                <div class="reveal bg-slate-900 p-10 rounded-[3.5rem] text-white shadow-2xl relative overflow-hidden">
+                <div class="reveal bg-slate-900 p-10 rounded-[3.5rem] text-white shadow-2xl relative overflow-hidden border border-white/5">
                     <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/10 blur-3xl"></div>
                     
-                    <div class="mb-8">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-4 ml-2">Type de Matière</label>
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-3 ml-2 text-center md:text-left">Type de Métal</label>
                         <select id="mt" class="select-custom">
                             <option value="6.5">CUIVRE MELON (Grade A)</option>
-                            <option value="1.85">ALUMINIUM CARTER</option>
-                            <option value="1.30">LAITON MÉLANGÉ</option>
-                            <option value="4.70">CÂBLES ÉLECTRIQUES</option>
-                            <option value="0.22">FERRAILLE LOURDE E3</option>
+                            <option value="1.8">ALUMINIUM CARTER</option>
+                            <option value="1.3">LAITON MÉLANGÉ</option>
+                            <option value="4.5">CÂBLES ÉLECTRIQUES</option>
+                            <option value="0.2">FERRAILLE LOURDE E3</option>
                         </select>
                     </div>
 
-                    <div class="mb-10">
-                        <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-4 ml-2">Quantité estimée (KG)</label>
-                        <input type="number" id="mw" placeholder="Quantité en kg..." class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl text-white font-bold outline-none focus:border-emerald-500 transition-colors">
+                    <div class="mb-8">
+                        <label class="block text-[10px] font-black uppercase tracking-widest text-emerald-400 mb-3 ml-2 text-center md:text-left">Quantité (kg)</label>
+                        <input type="number" id="mw" placeholder="Ex: 50" class="select-custom bg-white/5" style="border-radius: 1rem;">
                     </div>
 
-                    <div class="text-center bg-white/5 p-10 rounded-3xl border border-white/5">
-                        <span class="block text-[10px] text-slate-500 uppercase font-black mb-3 tracking-widest">Valeur Estimée</span>
-                        <div class="text-7xl font-black text-emerald-400 tracking-tighter"><span id="tp">0</span>€</div>
+                    <div class="text-center bg-white/5 p-8 rounded-2xl border border-white/5 backdrop-blur-sm">
+                        <span class="block text-[10px] text-slate-500 uppercase font-black mb-2 tracking-widest">Valeur indicative</span>
+                        <div class="text-6xl font-black text-emerald-400 tracking-tighter"><span id="tp">0</span>€</div>
                     </div>
 
-                    <a href="tel:0699491131" class="w-full mt-10 bg-emerald-600 py-6 rounded-2xl font-black text-[10px] tracking-widest text-center block uppercase hover:bg-emerald-500 transition-colors shadow-xl">
-                        VENDRE MAINTENANT
+                    <a href="tel:0699491131" class="w-full mt-8 bg-emerald-500 py-5 rounded-2xl font-black text-xs tracking-widest text-center block uppercase hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20">
+                        Vendre maintenant
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="py-40 px-6 text-center">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-6xl md:text-8xl font-black text-slate-900 mb-16 reveal tracking-tighter italic text-balanced">Réactivité <br><span class="text-emerald-500 not-italic">Garantie.</span></h2>
-            <div class="glass-panel p-12 md:p-24 rounded-[6rem] reveal relative overflow-hidden">
-                <div class="absolute -bottom-20 -right-20 w-80 h-80 bg-emerald-100/30 rounded-full blur-[100px]"></div>
-                <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-10 block">Sentier de l'Étang, 26120 Chabeuil</span>
-                <a href="tel:0699491131" class="text-5xl md:text-[7rem] font-black text-slate-900 hover:text-emerald-600 transition-colors block tracking-tighter mb-4 leading-none">06 99 49 11 31</a>
+    <!-- FAQ Section -->
+    <section id="faq" class="py-32 px-6">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl font-extrabold text-slate-900 mb-12 text-center reveal">Questions <span class="text-emerald-600">Fréquentes</span></h2>
+            <div class="space-y-4">
+                <details class="faq-item card-premium rounded-3xl p-6 reveal">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-lg text-slate-800 list-none">
+                        Quels métaux rachetez-vous ?
+                        <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-4 text-slate-500 leading-relaxed">
+                        Nous rachetons tout type de métaux ferreux (acier, fonte) et non-ferreux (cuivre, laiton, aluminium, plomb, zinc) ainsi que les batteries et câbles électriques.
+                    </div>
+                </details>
+                <details class="faq-item card-premium rounded-3xl p-6 reveal">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-lg text-slate-800 list-none">
+                        Comment sont fixés les prix ?
+                        <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-4 text-slate-500 leading-relaxed">
+                        Nos prix sont indexés quotidiennement sur les cours officiels du LME (London Metal Exchange) pour vous garantir la meilleure valorisation du marché.
+                    </div>
+                </details>
+                <details class="faq-item card-premium rounded-3xl p-6 reveal">
+                    <summary class="flex items-center justify-between cursor-pointer font-bold text-lg text-slate-800 list-none">
+                        La pose de benne est-elle payante ?
+                        <svg class="w-6 h-6 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="mt-4 text-slate-500 leading-relaxed">
+                        Non, nous mettons gratuitement à disposition des bennes de 8m³ à 30m³ pour les professionnels et gros chantiers de la région de Chabeuil.
+                    </div>
+                </details>
             </div>
         </div>
     </section>
 
     <footer class="py-20 px-6 border-t border-slate-100 text-center">
         <p class="text-[9px] text-slate-400 font-bold tracking-[0.3em] uppercase mb-4">
-            &copy; 2024 — RACHAT FERRAILLE CHABEUIL • SOLUTIONS DE VALORISATION HAUTE PERFORMANCE
+            &copy; 2024 — RACHAT FERRAILLE CHABEUIL • RÉSEAU DURABLE
         </p>
-        <div class="flex flex-wrap justify-center gap-6 text-[8px] font-black text-slate-400 uppercase tracking-widest mb-6">
-            <a href="#" class="hover:text-emerald-600">Légalité</a>
-            <a href="#" class="hover:text-emerald-600">Confidentialité</a>
-            <a href="#" class="hover:text-emerald-600">Tri Sélectif</a>
-        </div>
         <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">
             site web by <a href="http://www.jaad.studio" target="_blank" class="text-emerald-600 hover:text-emerald-500 underline decoration-emerald-200 underline-offset-4 transition-colors">JAAD studio</a>
         </p>
     </footer>
 
     <script>
-        // --- LOGIQUE 3D : POINTS VERTS DYNAMIQUE ---
+        // --- CONFIGURATION 3D ---
         let scene, camera, renderer, particles, lineMesh;
         const particleCount = 400; 
         const maxDistance = 160;
@@ -285,7 +320,7 @@
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); 
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); 
             renderer.setClearColor(0xf8fafc, 1); 
             document.body.appendChild(renderer.domElement);
 
@@ -303,34 +338,19 @@
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             
             const canvasPoint = document.createElement('canvas');
-            canvasPoint.width = 128;
-            canvasPoint.height = 128;
+            canvasPoint.width = 128; canvasPoint.height = 128;
             const ctxP = canvasPoint.getContext('2d');
             const grad = ctxP.createRadialGradient(64, 64, 0, 64, 64, 64);
-            grad.addColorStop(0, 'rgba(5, 150, 105, 1)');
-            grad.addColorStop(0.2, 'rgba(5, 150, 105, 0.6)');
-            grad.addColorStop(1, 'rgba(5, 150, 105, 0)');
-            ctxP.fillStyle = grad;
-            ctxP.fillRect(0, 0, 128, 128);
+            grad.addColorStop(0, 'rgba(16, 185, 129, 1)');
+            grad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+            ctxP.fillStyle = grad; ctxP.fillRect(0, 0, 128, 128);
             const textureP = new THREE.CanvasTexture(canvasPoint);
 
-            particles = new THREE.Points(geometry, new THREE.PointsMaterial({ 
-                color: 0x059669, 
-                size: 12, 
-                map: textureP,
-                transparent: true, 
-                opacity: 0.5,
-                blending: THREE.NormalBlending, 
-                depthWrite: false
-            }));
+            particles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x10b981, size: 12, map: textureP, transparent: true, opacity: 0.5, blending: THREE.NormalBlending, depthWrite: false }));
             scene.add(particles);
 
             const lineGeometry = new THREE.BufferGeometry();
-            lineMesh = new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({ 
-                color: 0x059669, 
-                transparent: true, 
-                opacity: 0.1 
-            }));
+            lineMesh = new THREE.LineSegments(lineGeometry, new THREE.LineBasicMaterial({ color: 0x10b981, transparent: true, opacity: 0.1 }));
             scene.add(lineMesh);
 
             window.vel = velocities;
@@ -339,38 +359,29 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            
             const pos = particles.geometry.attributes.position.array;
             const linePos = [];
-            const vel = window.vel;
-
             for (let i = 0; i < particleCount; i++) {
                 const ix = i * 3;
-                pos[ix] += vel[i].x;
-                pos[ix+1] += vel[i].y;
-                pos[ix+2] += vel[i].z;
-
-                if (Math.abs(pos[ix]) > 1300) vel[i].x *= -1;
-                if (Math.abs(pos[ix+1]) > 1300) vel[i].y *= -1;
+                pos[ix] += window.vel[i].x;
+                pos[ix+1] += window.vel[i].y;
+                if (Math.abs(pos[ix]) > 1300) window.vel[i].x *= -1;
+                if (Math.abs(pos[ix+1]) > 1300) window.vel[i].y *= -1;
 
                 if (i % 3 === 0) {
                     for (let j = i + 1; j < particleCount; j += 8) {
                         const jx = j * 3;
-                        const dx = pos[ix] - pos[jx];
-                        const dy = pos[ix+1] - pos[jx+1];
+                        const dx = pos[ix] - pos[jx], dy = pos[ix+1] - pos[jx+1];
                         if (Math.abs(dx) < maxDistance && Math.abs(dy) < maxDistance) {
                             linePos.push(pos[ix], pos[ix+1], pos[ix+2], pos[jx], pos[jx+1], pos[jx+2]);
                         }
                     }
                 }
             }
-
             particles.geometry.attributes.position.needsUpdate = true;
             lineMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
-            
-            particles.rotation.y += 0.0004;
-            lineMesh.rotation.y += 0.0004;
-
+            particles.rotation.y += 0.0006;
+            lineMesh.rotation.y += 0.0006;
             renderer.render(scene, camera);
         }
 
@@ -378,32 +389,17 @@
             init3D();
             gsap.to("#loader", { opacity: 0, duration: 1, onComplete: () => document.getElementById("loader").remove() });
             gsap.registerPlugin(ScrollTrigger);
-            
             gsap.utils.toArray(".reveal").forEach(el => {
                 gsap.from(el, { scrollTrigger: { trigger: el, start: "top 95%" }, y: 30, opacity: 0, duration: 1.2, ease: "power2.out" });
             });
 
-            // Simulator logic
+            // Simulator
             const mt = document.getElementById('mt'), mw = document.getElementById('mw'), tp = document.getElementById('tp');
             const up = () => { 
                 const value = Math.floor(parseFloat(mt.value) * (parseFloat(mw.value) || 0));
-                gsap.to(tp, {
-                    innerText: value,
-                    duration: 0.6,
-                    snap: { innerText: 1 },
-                    ease: "power3.out"
-                });
+                gsap.to(tp, { innerText: value, duration: 0.5, snap: { innerText: 1 }, ease: "power2.out" });
             };
             mt.onchange = up; mw.oninput = up;
-
-            // Smooth Scroll
-            document.querySelectorAll('a[href^="#"]').forEach(a => {
-                a.onclick = (e) => {
-                    e.preventDefault();
-                    const t = document.querySelector(a.getAttribute('href'));
-                    if (t) window.scrollTo({ top: t.offsetTop - 100, behavior: 'smooth' });
-                };
-            });
         };
 
         window.onresize = () => {
