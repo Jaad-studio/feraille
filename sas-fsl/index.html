@@ -1,16 +1,960 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/feraille/sas-fsl/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="SAS FSL - Spécialiste de la ferronnerie et métallerie sur-mesure à Carnoux-en-Provence. Création de pergolas, portails, et escaliers." />
-    <meta name="keywords" content="ferronnerie, SAS FSL, Carnoux, métallerie, portails sur-mesure, pergolas, artisanat" />
-    <title>SAS FSL | Ferronnerie d'Excellence à Carnoux</title>
-    <script type="module" crossorigin src="/feraille/sas-fsl/assets/index-B6Q75rIH.js"></script>
-    <link rel="stylesheet" crossorigin href="/feraille/sas-fsl/assets/index-DGQHJMT1.css">
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAS FSL | Ferronnerie d'Art à Carnoux-en-Provence</title>
+    <meta name="description" content="SAS FSL - Spécialiste de la ferronnerie et métallerie sur-mesure à Carnoux-en-Provence. Portails, pergolas, escaliers, garde-corps.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --iron: #2C2C2C;
+            --gold: #C9A55C;
+            --cream: #FAF7F2;
+            --warm-white: #FFF8F0;
+            --stone: #D4C5A9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--iron);
+            background: var(--cream);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ===== ANIMATED BACKGROUND PARTICLES ===== */
+        #particles-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+        }
+
+        /* ===== LOADER ===== */
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--cream);
+            transition: opacity 0.8s;
+        }
+        .loader-inner {
+            text-align: center;
+        }
+        .loader-inner .bar {
+            width: 60px; height: 3px;
+            background: var(--gold);
+            margin: 0 auto 1rem;
+            animation: loader-pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes loader-pulse {
+            0%,100% { transform: scaleX(1); opacity: 0.5; }
+            50% { transform: scaleX(2.5); opacity: 1; }
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.55);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            background: linear-gradient(
+                180deg, 
+                rgba(44,44,44,0.3) 0%, 
+                rgba(44,44,44,0.15) 50%,
+                rgba(250,247,242,0.95) 95%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: white;
+            padding: 2rem;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 1.1;
+            font-weight: 900;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            margin-bottom: 1rem;
+        }
+
+        .hero-content h1 span {
+            color: var(--gold);
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .hero-tagline {
+            font-size: clamp(0.9rem, 2vw, 1.3rem);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .btn-gold {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: var(--gold);
+            color: white;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gold:hover {
+            background: #b89545;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(201,165,92,0.3);
+        }
+
+        .btn-outline {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: var(--iron);
+        }
+
+        /* ===== FLOATING BADGE (over hero) ===== */
+        .floating-badges {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateY(50%);
+            z-index: 20;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .badge {
+            background: white;
+            padding: 1.5rem 2.5rem;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 220px;
+        }
+
+        .badge-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .badge-icon svg { color: white; width: 22px; height: 22px; }
+
+        .badge-label {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            line-height: 1.3;
+        }
+
+        .badge-sub {
+            font-size: 0.7rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ===== SECTION INTRO ===== */
+        .section-intro {
+            padding: 10rem 2rem 5rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-intro .overline {
+            font-size: 0.7rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--gold);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-intro h2 {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            margin-bottom: 1.5rem;
+            color: var(--iron);
+        }
+
+        .section-intro h2 em {
+            color: var(--gold);
+        }
+
+        .section-intro p {
+            max-width: 600px;
+            margin: 0 auto;
+            color: #777;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* ===== GALLERY ===== */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .gallery { grid-template-columns: 1fr; }
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        .gallery-item .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(44,44,44,0.85) 0%, rgba(44,44,44,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+            transition: all 0.5s;
+        }
+
+        .gallery-item .overlay h3 {
+            color: white;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            transform: translateY(10px);
+            opacity: 0.9;
+            transition: transform 0.5s;
+        }
+
+        .gallery-item:hover .overlay h3 {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-item .overlay p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* ===== PROCESS / SERVICES ===== */
+        .services-section {
+            padding: 8rem 2rem;
+            background: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            border: 1px solid #eee;
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 4px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.5s;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+        }
+
+        .service-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(201,165,92,0.15);
+            margin-bottom: 1.5rem;
+            line-height: 1;
+        }
+
+        .service-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: #888;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* ===== FULL-WIDTH VIDEO/IMAGE BANNER ===== */
+        .video-banner {
+            position: relative;
+            height: 60vh;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .video-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-banner .banner-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(44,44,44,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .video-banner .banner-text h2 {
+            color: white;
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+        }
+
+        .video-banner .banner-text h2 em {
+            color: var(--gold);
+        }
+
+        /* ===== CONTACT ===== */
+        .contact-section {
+            padding: 8rem 2rem;
+            background: var(--iron);
+            color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .contact-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        .contact-info h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-info h2 em { color: var(--gold); }
+
+        .contact-info p {
+            color: rgba(255,255,255,0.6);
+            line-height: 1.8;
+            margin-bottom: 3rem;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-detail-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .contact-detail-icon svg { color: white; width: 22px; height: 22px; }
+
+        .contact-detail-text .label {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.3rem;
+        }
+
+        .contact-detail-text .value {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .contact-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-logo-box {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 4rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .contact-logo-box .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .contact-logo-box .logo-text span {
+            color: var(--gold);
+        }
+
+        .contact-logo-box .slogan {
+            color: rgba(255,255,255,0.4);
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            background: #1a1a1a;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 10;
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* ===== REVEAL ANIMATION ===== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 1.2rem 2rem;
+            transition: all 0.4s;
+        }
+
+        .nav.scrolled {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav.scrolled .nav-brand {
+            color: var(--iron);
+        }
+
+        .nav-brand span { color: var(--gold); }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav.scrolled .nav-links a {
+            color: var(--iron);
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-cta {
+            background: var(--gold);
+            color: white !important;
+            padding: 0.8rem 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .floating-badges { flex-direction: column; align-items: center; padding: 0 1rem; }
+        }
+
+        /* ===== WhatsApp ===== */
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            box-shadow: 0 8px 20px rgba(37,211,102,0.35);
+            transition: all 0.3s;
+            animation: whatsapp-pulse 2s infinite;
+        }
+        .whatsapp-btn:hover { transform: scale(1.1); }
+        .whatsapp-btn svg { width: 30px; height: 30px; }
+        @keyframes whatsapp-pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37,211,102,0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(37,211,102,0); }
+            100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOADER -->
+    <div id="loader">
+        <div class="loader-inner">
+            <div class="bar"></div>
+            <p style="font-size:0.65rem; letter-spacing:5px; text-transform:uppercase; color:#999; font-weight:700;">SAS FSL • Ferronnerie</p>
+        </div>
+    </div>
+
+    <!-- ANIMATED BACKGROUND CANVAS -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- WHATSAPP -->
+    <a href="https://wa.me/33699491131" target="_blank" class="whatsapp-btn">
+        <svg fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+
+    <!-- NAVIGATION -->
+    <nav class="nav" id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">FSL<span>.</span></a>
+            <ul class="nav-links">
+                <li><a href="#realisations">Réalisations</a></li>
+                <li><a href="#savoir-faire">Savoir-Faire</a></li>
+                <li><a href="#contact" class="nav-cta">Devis Gratuit</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="./images/portail.png" alt="Portail en fer forgé par FSL Ferronnerie">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="reveal hero-tagline">Ferronnerie d'art • Carnoux-en-Provence</p>
+            <h1 class="reveal">L'Art du <span>Métal</span></h1>
+            <div class="reveal" style="display:flex; gap:1.5rem; justify-content:center; flex-wrap:wrap; margin-top:1rem;">
+                <a href="#contact" class="btn-gold">Demander un Devis</a>
+                <a href="#realisations" class="btn-outline">Nos Réalisations</a>
+            </div>
+        </div>
+        <div class="floating-badges">
+            <div class="badge reveal">
+                <div class="badge-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+                <div><div class="badge-label">Garantie Décennale</div><div class="badge-sub">Assurance Pro</div></div>
+            </div>
+            <div class="badge reveal">
+                <div class="badge-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+                <div><div class="badge-label">Intervention Rapide</div><div class="badge-sub">Région PACA</div></div>
+            </div>
+            <div class="badge reveal">
+                <div class="badge-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg></div>
+                <div><div class="badge-label">100% Sur-Mesure</div><div class="badge-sub">Artisanat Local</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION INTRO -->
+    <section class="section-intro">
+        <p class="overline reveal">SAS FSL — Depuis 2021</p>
+        <h2 class="reveal">Sublimer vos espaces avec <em>l'élégance du fer</em></h2>
+        <p class="reveal">De la conception à la pose, nous donnons vie à vos projets sur-mesure. Chaque pièce est fabriquée avec passion dans notre atelier à Carnoux-en-Provence.</p>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="realisations">
+        <div class="gallery">
+            <div class="gallery-item reveal">
+                <img src="./images/portail.png" alt="Portail en fer forgé">
+                <div class="overlay">
+                    <h3>Portails</h3>
+                    <p>Sur-Mesure & Motorisés</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="./images/pergola.png" alt="Pergola métallique">
+                <div class="overlay">
+                    <h3>Pergolas</h3>
+                    <p>Bioclimatiques & Design</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="./images/escalier.png" alt="Escalier métallique">
+                <div class="overlay">
+                    <h3>Escaliers</h3>
+                    <p>Pièces Maîtresses</p>
+                </div>
+            </div>
+            <div class="gallery-item reveal">
+                <img src="./images/garde-corps.png" alt="Garde-corps artisanal">
+                <div class="overlay">
+                    <h3>Garde-Corps</h3>
+                    <p>Sécurité & Esthétique</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FULL-WIDTH VIDEO BANNER -->
+    <div class="video-banner reveal">
+        <img src="./images/pergola.png" alt="Atelier FSL" style="filter: grayscale(30%);">
+        <div class="banner-overlay">
+            <div class="banner-text">
+                <h2>Chaque détail <em>compte</em></h2>
+                <a href="#contact" class="btn-gold">Discutons de votre projet</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAVOIR-FAIRE / PROCESS -->
+    <section class="services-section" id="savoir-faire">
+        <div class="section-intro" style="padding-top:0;">
+            <p class="overline reveal">Notre Processus</p>
+            <h2 class="reveal">Du croquis à la <em>réalité</em></h2>
+        </div>
+        <div class="services-grid">
+            <div class="service-card reveal">
+                <div class="service-number">01</div>
+                <h3>Étude & Conception 3D</h3>
+                <p>Nous modélisons votre projet pour une visualisation avant fabrication. Aucune mauvaise surprise.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-number">02</div>
+                <h3>Fabrication Artisanale</h3>
+                <p>Découpe, soudure et assemblage réalisés à la main dans notre atelier avec des matériaux de premier choix.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-number">03</div>
+                <h3>Traitement & Finition</h3>
+                <p>Thermolaquage, métallisation ou patine pour une finition irréprochable et une durabilité maximale.</p>
+            </div>
+            <div class="service-card reveal">
+                <div class="service-number">04</div>
+                <h3>Pose Professionnelle</h3>
+                <p>Installation por notre équipe expérimentée, dans les règles de l'art, avec une garantie décennale.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-grid">
+            <div class="contact-info reveal">
+                <h2>Votre Projet<br><em>Commence Ici</em></h2>
+                <p>Parlons de votre vision. Que ce soit un portail, une pergola, un escalier ou un garde-corps, nous transformons vos idées en réalité métallique.</p>
+                <div class="contact-detail">
+                    <div class="contact-detail-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
+                    <div class="contact-detail-text">
+                        <div class="label">Appelez-nous</div>
+                        <div class="value">06 99 49 11 31</div>
+                    </div>
+                </div>
+                <div class="contact-detail">
+                    <div class="contact-detail-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+                    <div class="contact-detail-text">
+                        <div class="label">Notre Atelier</div>
+                        <div class="value">Carnoux-en-Provence, 13470</div>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-visual reveal">
+                <div class="contact-logo-box">
+                    <div class="logo-text">F<span>S</span>L</div>
+                    <p class="slogan">Ferronnerie d'Art • Sur-Mesure</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2024 SAS FSL — Ferronnerie & Métallerie • Carnoux-en-Provence</p>
+        <p style="margin-top:0.8rem;">site web by <a href="http://www.jaad.studio" target="_blank">JAAD studio</a></p>
+    </footer>
+
+    <script>
+        // ===== ANIMATED PARTICLE BACKGROUND =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 80;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(201, 165, 92, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function connectParticles() {
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a + 1; b < particles.length; b++) {
+                    const dx = particles[a].x - particles[b].x;
+                    const dy = particles[a].y - particles[b].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 150) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(201, 165, 92, ${0.05 * (1 - distance / 150)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            connectParticles();
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== GSAP ANIMATIONS =====
+        window.addEventListener('load', () => {
+            // Hide loader
+            gsap.to("#loader", {
+                opacity: 0,
+                duration: 0.8,
+                onComplete: () => document.getElementById("loader").remove()
+            });
+
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Reveal animations
+            gsap.utils.toArray('.reveal').forEach(el => {
+                gsap.fromTo(el,
+                    { y: 50, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 1.2,
+                        ease: 'power3.out',
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 90%',
+                        }
+                    }
+                );
+            });
+
+            // Parallax on hero image
+            gsap.to('.hero-bg img', {
+                yPercent: 20,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true,
+                }
+            });
+
+            // Parallax on video banner
+            gsap.to('.video-banner img', {
+                yPercent: 15,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.video-banner',
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: true,
+                }
+            });
+
+            // Nav scroll effect
+            ScrollTrigger.create({
+                start: 'top -80',
+                end: 99999,
+                toggleClass: { className: 'scrolled', targets: '#navbar' }
+            });
+        });
+    </script>
+</body>
 </html>
