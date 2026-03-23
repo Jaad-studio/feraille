@@ -734,11 +734,52 @@
             font-size: 0.95rem;
         }
 
-        /* ===== CONTACT FORM ===== */
+        /* ===== CONTACT FORM 3D ===== */
+        .form-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(201,165,92,0.15);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease-out, box-shadow 0.3s;
+        }
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        .form-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(201,165,92,0.06), transparent 40%);
+            pointer-events: none;
+        }
+        .form-card-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: white;
+            margin-bottom: 0.5rem;
+            transform: translateZ(30px);
+        }
+        .form-card-title em { color: var(--gold); font-style: italic; }
+        .form-card-sub {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.35);
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+            transform: translateZ(20px);
+        }
         .contact-form {
             display: flex;
             flex-direction: column;
-            gap: 1.2rem;
+            gap: 1.5rem;
+            transform: translateZ(25px);
         }
         .form-row {
             display: grid;
@@ -747,28 +788,50 @@
         }
         @media (max-width: 768px) {
             .form-row { grid-template-columns: 1fr; }
+            .form-card { padding: 2rem 1.5rem; }
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        .form-group:focus-within label {
+            opacity: 1;
         }
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
             padding: 1rem 1.2rem;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 2px;
             color: white;
             font-family: 'Inter', sans-serif;
             font-size: 0.9rem;
-            transition: border-color 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             outline: none;
-        }
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255,255,255,0.3);
         }
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             border-color: var(--gold);
+            background: rgba(201,165,92,0.05);
+            box-shadow: 0 0 20px rgba(201,165,92,0.1), inset 0 0 20px rgba(201,165,92,0.03);
+            transform: translateY(-2px);
+        }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.2);
         }
         .form-group select option {
             background: #2C2C2C;
@@ -779,23 +842,46 @@
             min-height: 100px;
         }
         .btn-submit {
-            display: inline-block;
-            padding: 1.1rem 2.5rem;
-            background: var(--gold);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 1.2rem 2.5rem;
+            background: linear-gradient(135deg, var(--gold), #e8c868);
             color: white;
             font-weight: 700;
             font-size: 0.75rem;
             letter-spacing: 3px;
             text-transform: uppercase;
-            border: 2px solid var(--gold);
+            border: none;
             cursor: pointer;
-            transition: all 0.4s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             font-family: 'Inter', sans-serif;
-            align-self: flex-start;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-submit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 200%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+        .btn-submit:hover::after {
+            left: 100%;
         }
         .btn-submit:hover {
-            background: transparent;
-            color: var(--gold);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(201,165,92,0.3);
+        }
+        .btn-submit:active {
+            transform: translateY(0) scale(0.98);
+        }
+        .btn-submit.success {
+            background: linear-gradient(135deg, #25d366, #20b858) !important;
+            box-shadow: 0 15px 40px rgba(37,211,102,0.3) !important;
         }
 
         /* ===== STATS BAR ===== */
@@ -1068,26 +1154,44 @@
                     </div>
                 </div>
             </div>
-            <div class="reveal">
-                <form class="contact-form" onsubmit="event.preventDefault(); this.querySelector('.btn-submit').textContent='ENVOYÉ ✓'; this.querySelector('.btn-submit').style.background='#25d366'; this.querySelector('.btn-submit').style.borderColor='#25d366';">
+            <div class="form-card" id="formCard">
+                <h3 class="form-card-title">Devis <em>Gratuit</em></h3>
+                <p class="form-card-sub">Réponse sous 24h garantie</p>
+                <form class="contact-form" id="contactForm">
                     <div class="form-row">
-                        <div class="form-group"><input type="text" placeholder="Votre nom" required></div>
-                        <div class="form-group"><input type="tel" placeholder="Téléphone" required></div>
+                        <div class="form-group form-anim">
+                            <label>Votre Nom</label>
+                            <input type="text" placeholder="Jean Dupont" required>
+                        </div>
+                        <div class="form-group form-anim">
+                            <label>Téléphone</label>
+                            <input type="tel" placeholder="06 12 34 56 78" required>
+                        </div>
                     </div>
-                    <div class="form-group"><input type="email" placeholder="Adresse e-mail" required></div>
-                    <div class="form-group">
+                    <div class="form-group form-anim">
+                        <label>Adresse E-mail</label>
+                        <input type="email" placeholder="votre@email.com" required>
+                    </div>
+                    <div class="form-group form-anim">
+                        <label>Type de Projet</label>
                         <select required>
-                            <option value="" disabled selected>Type de projet</option>
+                            <option value="" disabled selected>Choisir un type de projet</option>
                             <option>Portail sur-mesure</option>
-                            <option>Pergola</option>
+                            <option>Pergola bioclimatique</option>
                             <option>Escalier métallique</option>
                             <option>Garde-corps</option>
                             <option>Clôture / Grille</option>
                             <option>Autre projet</option>
                         </select>
                     </div>
-                    <div class="form-group"><textarea placeholder="Décrivez votre projet..." rows="4"></textarea></div>
-                    <button type="submit" class="btn-submit">Envoyer ma demande</button>
+                    <div class="form-group form-anim">
+                        <label>Votre Projet</label>
+                        <textarea placeholder="Décrivez votre projet, vos dimensions, vos envies..." rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit form-anim">
+                        <span>Envoyer ma demande</span>
+                        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </button>
                 </form>
             </div>
         </div>
@@ -1269,7 +1373,68 @@
                     }
                 );
             });
+
+            // Staggered form field animations
+            gsap.from('.form-anim', {
+                opacity: 0,
+                y: 30,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '#formCard',
+                    start: 'top 80%',
+                }
+            });
+
+            // Contact info slide-in
+            gsap.from('.contact-detail', {
+                opacity: 0,
+                x: -40,
+                duration: 0.6,
+                stagger: 0.15,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: '.contact-section',
+                    start: 'top 75%',
+                }
+            });
         });
+
+        // ===== 3D TILT ON FORM CARD =====
+        const formCard = document.getElementById('formCard');
+        if (formCard) {
+            formCard.addEventListener('mousemove', (e) => {
+                const rect = formCard.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                formCard.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+                formCard.style.boxShadow = `${-x * 20}px ${y * 20}px 40px rgba(201,165,92,0.08)`;
+                // Radial glow follow
+                formCard.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+                formCard.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+            });
+            formCard.addEventListener('mouseleave', () => {
+                formCard.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)';
+                formCard.style.boxShadow = 'none';
+            });
+        }
+
+        // ===== FORM SUBMIT =====
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const btn = contactForm.querySelector('.btn-submit');
+                btn.classList.add('success');
+                btn.innerHTML = '<span>ENVOYÉ ✓</span>';
+                // Animate a little bounce
+                gsap.fromTo(btn, 
+                    { scale: 0.95 }, 
+                    { scale: 1, duration: 0.4, ease: 'back.out(2)' }
+                );
+            });
+        }
     </script>
 </body>
 </html>
